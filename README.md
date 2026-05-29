@@ -167,12 +167,4 @@ Aplikasi ini dirancang sebagai media pembelajaran interaktif untuk tugas kuliah,
 
 ---
 
-### Kelompok / Identitas Mahasiswa
-
-* **Mata Kuliah:** Keamanan Komputer
-* **Dibuat oleh:** [Isi Nama Anda / Nama Kelompok di Sini]
-* **NIM:** [Isi NIM Anda di Sini]
-
-**Program Studi Teknik Informatika**  
-**Fakultas Ilmu Komputer**  
 **© 2026 Encrypter.ID. All Rights Reserved.**
