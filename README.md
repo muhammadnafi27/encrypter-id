@@ -2,252 +2,177 @@
 
 ## Secure File Sharing with Hybrid Cryptography
 
-Sistem keamanan file sharing berbasis **Hybrid Cryptography** menggunakan **AES-GCM** untuk enkripsi file dan **RSA-OAEP** untuk mengenkripsi kunci AES. Seluruh proses dilakukan di browser (client-side) menggunakan **Web Crypto API** — tidak ada data yang dikirim ke server.
+**Encrypter.ID** adalah sebuah aplikasi web interaktif berbasis client-side yang dirancang untuk mensimulasikan dan mengimplementasikan sistem pengiriman file secara aman (Secure File Sharing) menggunakan metode **Hybrid Cryptography**. Aplikasi ini memanfaatkan kekuatan enkripsi simetris (AES) untuk mengamankan konten file dan enkripsi asimetris (RSA) untuk mendistribusikan kunci secara aman.
+
+Proyek ini dibuat dan dikembangkan khusus sebagai **Tugas Mata Kuliah Keamanan Komputer**.
 
 ---
 
-## 🎯 Tujuan Sistem
+## 🎓 Konteks Proyek Keamanan Komputer
 
-1. Membangun sistem **file sharing terenkripsi** yang aman antara dua pihak (Alice → Bob)
-2. Mengimplementasikan **Hybrid Cryptography** menggunakan standard industri (AES + RSA)
-3. Mendemonstrasikan prinsip keamanan informasi secara interaktif dan edukatif
-4. Menyediakan **Performance Lab** untuk mengukur performa enkripsi/dekripsi
-5. Mengedukasi tentang keamanan enkripsi melalui **simulasi brute force** pada kunci kecil
+* **Mata Kuliah:** Keamanan Komputer / Keamanan Informasi
+* **Topik Utama:** Kriptografi Hibrida (Hybrid Cryptography), Manajemen Kunci, Kriptografi di Sisi Klien (Client-Side Cryptography), dan Analisis Performa Algoritma Kriptografi.
+* **Tujuan Akademik:** 
+  1. Mengimplementasikan konsep teori kriptografi ke dalam aplikasi web nyata secara interaktif.
+  2. Menganalisis efisiensi dan performa algoritma simetris dan asimetris melalui simulasi langsung.
+  3. Menguji ketahanan enkripsi terhadap serangan Brute Force pada panjang kunci yang bervariasi secara edukatif.
 
 ---
 
-## ✨ Fitur Utama
+## 🔐 Konsep Hybrid Cryptography di Encrypter.ID
 
-### 1. Landing Page
-- Hero section dengan penjelasan hybrid cryptography
-- Diagram alur visual: Alice → Encrypt → Transfer → Decrypt → Bob
-- Feature cards: End-to-End Encryption, Zero Server Upload, Performance Lab
+Dalam keamanan data, enkripsi simetris dan asimetris memiliki keunggulan dan kelemahan masing-masing:
+* **AES-256-GCM** (Simetris): Sangat cepat dan efisien dalam memproses data berukuran besar, namun memerlukan metode pertukaran kunci yang aman agar pengirim dan penerima memiliki kunci yang sama.
+* **RSA-OAEP 2048-bit** (Asimetris): Menggunakan pasangan kunci publik (untuk enkripsi) dan kunci privat (untuk dekripsi). Sangat aman untuk pertukaran kunci tanpa perlu berbagi rahasia terlebih dahulu, namun sangat lambat jika digunakan untuk mengenkripsi file berukuran besar.
 
-### 2. Dashboard Encrypt
-- Drag & drop file upload
-- Generate RSA-2048 key pair
-- Generate AES-256 key
-- Encrypt file dengan AES-GCM
-- Export RSA keys dalam format PEM
-- Download encrypted package (.enc.json)
-- Activity log terminal style
+**Sistem Kriptografi Hibrida** menggabungkan keduanya:
+1. **Enkripsi File:** File dienkripsi menggunakan kunci simetris AES-256-GCM yang di-generate secara acak dan unik untuk setiap sesi.
+2. **Proteksi Kunci:** Kunci AES tersebut kemudian dienkripsi menggunakan kunci publik RSA-OAEP milik penerima.
+3. **Paket Data:** Pengirim menggabungkan file yang terenkripsi (ciphertext), Initialization Vector (IV), kunci AES yang terenkripsi, dan metadata menjadi satu file paket aman `.enc.json`.
+4. **Dekripsi:** Penerima menggunakan kunci privat RSA-OAEP miliknya untuk mendekripsi kunci AES, lalu menggunakan kunci AES tersebut untuk mendekripsi file asli.
+
+---
+
+## ✨ Fitur Utama Sistem
+
+### 1. Landing Page / Overview
+* Tampilan bergaya cyber security modern dengan latar belakang video futuristik (`assets/background.mp4`) berpadu dengan efek glassmorphism yang premium.
+* Dashboard interaktif yang menjelaskan skema alur pengiriman file terenkripsi secara visual.
+
+### 2. Encrypt Lab
+* Area drag and drop interaktif untuk mengunggah file yang ingin dienkripsi.
+* Pembuatan pasangan kunci RSA-2048 (Public & Private Key) secara langsung di browser.
+* Ekspor kunci ke dalam format standar PEM (`.pem` format) yang aman.
+* Kompresi data dan pembuatan paket enkripsi terenkapsulasi `.enc.json`.
+* Terminal log real-time bergaya konsol hacker untuk memantau detail proses kriptografi.
 
 ### 3. Transfer Simulation
-- Simulasi visual pengiriman file dari Alice ke Bob
-- Progress bar dengan 4 tahap: Preparing → Encrypting → Sending → Received
-- Metadata transfer: sender, receiver, filename, timestamp, file size
+* Simulasi visual interaktif pengiriman paket data terenkripsi dari pihak pengirim (Alice) ke pihak penerima (Bob).
+* Progress bar real-time yang menunjukkan langkah demi langkah persiapan, pengenkripsian, pengiriman jaringan virtual, hingga penerimaan paket.
 
-### 4. Decrypt & Download
-- Upload encrypted package
-- Import/paste RSA private key (PEM format)
-- Validasi private key
-- Dekripsi file
-- Download file asli
-- Decryption log
+### 4. Decrypt Lab
+* Form untuk mengunggah paket file terenkripsi `.enc.json`.
+* Input kunci privat RSA PEM penerima untuk melakukan otorisasi dekripsi.
+* Sistem dekripsi instan yang mengembalikan file ke format aslinya tanpa kehilangan data.
+* Peringatan keamanan otomatis jika kunci privat yang dimasukkan salah atau jika file telah dimodifikasi (menggunakan fitur integritas data AES-GCM).
 
-### 5. Performance Lab
-- Benchmark enkripsi & dekripsi
-- Generate test file: 1MB, 5MB, 10MB, 100MB
-- Tabel hasil: waktu enkripsi, waktu dekripsi, estimasi RAM, CPU score
-- Chart (Canvas) perbandingan encrypt vs decrypt time
-- Pengukuran presisi menggunakan `performance.now()`
+### 5. Performance Lab (Benchmark)
+* Pengujian performa enkripsi dan dekripsi menggunakan data acak berukuran bervariasi (1 MB, 5 MB, 10 MB, 100 MB).
+* Dukungan pemilihan beberapa ukuran file secara bersamaan menggunakan chip interaktif.
+* Pengukuran waktu presisi tinggi dengan `performance.now()`.
+* Visualisasi grafik perbandingan performa menggunakan Canvas API.
+* Analisis memori (RAM) dan perhitungan skor kinerja CPU secara dinamis.
 
-### 6. Security Demo
-- Simulasi brute force untuk **dummy key kecil** (8-bit, 10-bit, 12-bit, 16-bit)
-- Perbandingan waktu crack: dummy key vs AES-128 vs AES-256 vs RSA-2048
-- Penjelasan keamanan AES-GCM dan RSA-OAEP
+### 6. Security & Brute Force Demo
+* Simulator serangan Brute Force terhadap kunci dummy berukuran kecil (8-bit, 10-bit, 12-bit, dan 16-bit) untuk menunjukkan bagaimana serangan pencarian kunci bekerja secara sistematis.
+* Menampilkan estimasi waktu crack secara matematis untuk membandingkan kunci dummy dengan standar enkripsi modern seperti AES-128, AES-256, dan RSA-2048.
+* Memberikan pemahaman edukatif mengenai pentingnya panjang kunci dalam menjaga kerahasiaan data dari ancaman komputasi superkomputer.
 
-### 7. Documentation
-- Alur kerja 7 langkah enkripsi/dekripsi
-- Diagram alur visual
-- Penjelasan teknis AES-GCM dan RSA-OAEP
-- Security considerations
+### 7. Interactive Documentation
+* Penjelasan teknis alur enkripsi dan dekripsi yang dibagi menjadi 7 langkah terperinci.
+* Rekomendasi standar keamanan untuk implementasi di dunia nyata.
 
 ---
 
 ## 🛠 Teknologi yang Digunakan
 
-| Teknologi | Penggunaan |
-|-----------|------------|
-| HTML5 | Struktur halaman |
-| CSS3 | Styling, animasi, glassmorphism, responsive design |
-| JavaScript (ES6+) | Logika aplikasi, event handling |
-| Web Crypto API | AES-GCM, RSA-OAEP (native browser) |
-| Canvas API | Rendering chart benchmark |
-| File API | Membaca file untuk enkripsi |
-| Blob API | Membuat dan download encrypted package |
+Aplikasi ini dibangun menggunakan teknologi native web modern tanpa bergantung pada library atau framework eksternal untuk menjamin performa murni dan kemudahan dalam audit kode:
 
-**Tidak menggunakan framework atau library eksternal.**
+1. **Struktur:** HTML5 dengan markup semantik untuk SEO dan aksesibilitas.
+2. **Tampilan & Animasi:** CSS3 Vanilla dengan variabel dinamis, efek glassmorphism modern, desain responsif (mobile-friendly), dan pemutar video latar belakang terintegrasi.
+3. **Logika & Kriptografi:** JavaScript murni (ES6+ Modules) yang modular.
+4. **Mesin Kriptografi:** **Web Crypto API (SubtleCrypto)**, standar resmi browser modern untuk pengolahan kunci, enkripsi, dekripsi, dan tanda tangan digital dengan performa tinggi yang dioptimalkan di tingkat sistem operasi.
+5. **Visualisasi Data:** Canvas API untuk rendering chart performa benchmark secara dinamis.
 
 ---
 
-## 🚀 Cara Menjalankan Project
+## 📁 Struktur Kode Proyek
 
-### Metode 1: Langsung buka file
-```
-1. Buka file index.html di browser modern (Chrome, Firefox, Edge, Safari)
-2. Website siap digunakan
+```text
+encrypter-id/
+├── index.html              # File utama Single Page Application (SPA)
+├── README.md               # Dokumentasi utama proyek (file ini)
+├── assets/
+│   ├── logo.svg            # Logo animasi SVG ikonik
+│   └── background.mp4      # Video latar belakang futuristik
+├── css/
+│   ├── styles.css          # Design system, layout dasar, dan komponen visual
+│   └── responsive.css      # Aturan visual responsif untuk tablet dan mobile
+└── js/
+    ├── app.js              # Router SPA, event handler, dan inisialisasi menu
+    ├── crypto.js           # Core engine Web Crypto API (AES-GCM & RSA-OAEP)
+    ├── ui.js               # Pengolahan visual UI, terminal log, drag-drop, toast
+    ├── performance.js      # Algoritma benchmark performance lab & grafik Canvas
+    ├── storage.js          # Pengelolaan state data aplikasi secara in-memory
+    └── utils.js            # Fungsi helper konversi tipe data, format size, dan hex
 ```
 
-### Metode 2: Menggunakan Live Server
+---
+
+## 🚀 Panduan Menjalankan Proyek
+
+Web Crypto API membutuhkan lingkungan yang aman agar dapat berjalan secara penuh di browser. Browser modern melarang penggunaan fungsi kriptografi tingkat tinggi pada protokol HTTP biasa, kecuali pada alamat `localhost` atau `127.0.0.1`.
+
+### Cara 1: Menggunakan VS Code Live Server (Rekomendasi)
+1. Buka folder proyek ini di Visual Studio Code.
+2. Pastikan extension **Live Server** sudah terinstall.
+3. Klik kanan pada file `index.html` dan pilih **Open with Live Server**.
+4. Aplikasi akan otomatis terbuka di browser Anda pada alamat `http://127.0.0.1:5500`.
+
+### Cara 2: Menggunakan Server HTTP Python
+Jika Anda telah menginstall Python di komputer Anda, jalankan perintah berikut di terminal:
 ```bash
-# Jika menggunakan VS Code, install extension "Live Server"
-# Klik kanan index.html → "Open with Live Server"
-```
-
-### Metode 3: Python HTTP Server
-```bash
-cd encrypter-id
 python -m http.server 8000
-# Buka http://localhost:8000
 ```
+Buka browser dan akses alamat `http://localhost:8000`.
 
-### Metode 4: Node.js HTTP Server
+### Cara 3: Menggunakan Serve Node.js
+Jika Anda memiliki Node.js, Anda dapat menggunakan modul serve:
 ```bash
 npx serve .
 ```
-
-> ⚠️ Beberapa browser memerlukan HTTPS atau localhost untuk Web Crypto API.
-> Jika tidak berfungsi saat membuka file secara langsung, gunakan live server.
+Buka browser pada alamat yang diberikan oleh program tersebut.
 
 ---
 
-## 📁 Struktur Folder
+## 📊 Detail Algoritma & Parameter Kriptografi
 
-```
-encrypter-id/
-├── index.html              # Halaman utama SPA
-├── README.md               # Dokumentasi project
-├── assets/
-│   ├── logo.svg            # Logo animasi SVG
-│   └── icons/              # (SVG inline di HTML)
-├── css/
-│   ├── styles.css          # Design system + semua komponen
-│   └── responsive.css      # Breakpoints mobile/tablet/desktop
-├── js/
-│   ├── app.js              # Router SPA, navigasi, event handler
-│   ├── crypto.js           # Web Crypto API (AES-GCM, RSA-OAEP)
-│   ├── ui.js               # Toast, terminal log, drag-drop, progress
-│   ├── performance.js      # Benchmark engine, Canvas chart
-│   ├── storage.js          # State management (in-memory)
-│   └── utils.js            # Helper functions
-└── docs/
-    ├── architecture.md     # Arsitektur sistem
-    └── testing-guide.md    # Panduan pengujian
-```
+Untuk memenuhi standar keamanan akademis dan industri, parameter berikut digunakan di dalam sistem ini:
+
+| Parameter | Spesifikasi | Deskripsi |
+|-----------|-------------|-----------|
+| **Algoritma Simetris** | AES-GCM (Galois/Counter Mode) | Dipilih karena mendukung Authenticated Encryption (enkripsi sekaligus verifikasi integritas data secara bersamaan). |
+| **Panjang Kunci AES** | 256-bit | Standar enkripsi militer yang sangat aman dari serangan komputasi masa kini. |
+| **Initialization Vector (IV)** | 96-bit (12 bytes) acak | Digenerate menggunakan `crypto.getRandomValues()` untuk menjamin keamanan AES-GCM pada setiap enkripsi baru. |
+| **Algoritma Asimetris** | RSA-OAEP (Optimal Asymmetric Encryption Padding) | Standar enkripsi asimetris modern yang tahan terhadap serangan tebakan teks asal. |
+| **Panjang Kunci RSA** | 2048-bit | Panjang kunci minimum yang direkomendasikan industri saat ini untuk pertukaran kunci. |
+| **Fungsi Hash RSA** | SHA-256 | Algoritma hashing aman untuk fungsi padding OAEP. |
+| **Format Ekspor Kunci** | PEM (SPKI untuk kunci publik, PKCS8 untuk kunci privat) | Format standar berbasis teks base64 yang mudah disalin dan disimpan oleh pengguna. |
 
 ---
 
-## 🔐 Penjelasan AES + RSA (Hybrid Cryptography)
+## ⚠️ Batasan Sistem (Sifat Edukatif)
 
-### Mengapa Hybrid?
-- **AES** (symmetric) sangat cepat untuk mengenkripsi data besar
-- **RSA** (asymmetric) aman untuk pertukaran kunci tapi lambat untuk data besar
-- **Hybrid** menggabungkan keduanya: gunakan AES untuk file, RSA untuk mengamankan kunci AES
-
-### Alur Enkripsi
-```
-1. Generate AES-256 key (random, unik per sesi)
-2. Encrypt file data dengan AES-GCM → ciphertext + IV
-3. Encrypt AES key dengan RSA Public Key penerima → encrypted key
-4. Package: {ciphertext, IV, encrypted AES key, metadata}
-```
-
-### Alur Dekripsi
-```
-1. Penerima import RSA Private Key
-2. Decrypt encrypted AES key dengan RSA Private Key → AES key
-3. Decrypt ciphertext dengan AES-GCM + AES key + IV → file asli
-4. GCM auth tag memverifikasi integritas
-```
-
-### Spesifikasi
-| Parameter | Nilai |
-|-----------|-------|
-| AES Mode | GCM (Galois/Counter Mode) |
-| AES Key Length | 256-bit |
-| IV Length | 96-bit (12 bytes) |
-| RSA Mode | OAEP |
-| RSA Key Length | 2048-bit |
-| RSA Hash | SHA-256 |
-| Key Format Export | PEM (SPKI/PKCS8) |
+Aplikasi ini dirancang sebagai media pembelajaran interaktif untuk tugas kuliah, sehingga memiliki beberapa batasan fungsional:
+1. **Penyimpanan In-Memory:** Kunci dan data yang di-generate tidak disimpan secara persisten di server untuk menjaga privasi mutlak. Jika halaman web di-refresh, data in-memory akan hilang.
+2. **Kapasitas Ukuran File:** Karena seluruh enkripsi dilakukan di dalam memori RAM browser menggunakan tipe data ArrayBuffer, ukuran file ideal yang dienkripsi adalah di bawah 150-200 MB (tergantung spesifikasi perangkat pengguna) guna mencegah kegagalan alokasi memori browser.
+3. **Simulasi Jaringan:** Tahap pengiriman file pada menu **Transfer** adalah simulasi visual guna menggambarkan konsep pengiriman data antar pihak secara visual tanpa adanya pengunggahan file ke server luar.
 
 ---
 
-## 📊 Cara Pengujian File (1MB, 5MB, 10MB, 100MB)
+## 🔒 Pernyataan Keamanan & Etika (Disclaimer)
 
-### Langkah Pengujian:
-1. Buka halaman **Performance Lab** (klik "Lab" di navigasi)
-2. Klik salah satu tombol ukuran file: **1 MB**, **5 MB**, **10 MB**, atau **100 MB**
-3. Sistem akan:
-   - Generate random binary file sesuai ukuran
-   - Generate RSA key pair dan AES key
-   - Mengukur waktu enkripsi (`performance.now()`)
-   - Mengukur waktu dekripsi
-   - Estimasi penggunaan RAM
-   - Menghitung CPU benchmark score
-4. Hasil ditampilkan di tabel dan chart
-
-### Run All Benchmarks:
-- Klik **"Run All (1, 5, 10 MB)"** untuk menjalankan benchmark berurutan
-- Hasil ditampilkan dalam chart perbandingan
-
-### Catatan 100MB:
-- File 100MB memerlukan RAM yang cukup (minimal 1GB free RAM)
-- Proses mungkin memakan waktu beberapa detik hingga menit
-- Browser mungkin tampak "hang" sementara — ini normal
+* **Demo Brute Force:** Fitur Brute Force Simulator dibuat murni untuk tujuan edukasi keamanan komputer. Simulator ini hanya mencoba memecahkan kunci dummy berukuran sangat kecil yang dibuat secara dinamis di dalam sandbox memori browser, tidak melakukan peretasan nyata pada perangkat ataupun data user yang asli.
+* **Tanpa Upload Server:** Aplikasi ini menjamin 100% kerahasiaan data karena tidak ada satu pun byte dari file Anda yang diunggah ke internet. Semua proses pemrosesan data terjadi secara lokal di dalam browser Anda.
 
 ---
 
-## 📈 Cara Membaca Hasil Performance
+### Kelompok / Identitas Mahasiswa
 
-| Kolom | Keterangan |
-|-------|------------|
-| **File Size** | Ukuran file yang diuji |
-| **Encrypt Time** | Waktu total enkripsi (AES encrypt + RSA key encrypt) |
-| **Decrypt Time** | Waktu total dekripsi (RSA key decrypt + AES decrypt) |
-| **Est. RAM** | Estimasi penggunaan memori (Chrome: `performance.memory`, lainnya: estimasi) |
-| **CPU Score** | Skor benchmark CPU sintetis (lebih tinggi = lebih cepat) |
+* **Mata Kuliah:** Keamanan Komputer
+* **Dibuat oleh:** [Isi Nama Anda / Nama Kelompok di Sini]
+* **NIM:** [Isi NIM Anda di Sini]
 
-### Interpretasi Chart:
-- **Bar hijau**: Waktu enkripsi
-- **Bar lime**: Waktu dekripsi
-- Dekripsi biasanya lebih cepat karena tidak perlu generate kunci
-- Waktu meningkat secara linear seiring ukuran file
-
----
-
-## ⚠️ Batasan Sistem
-
-1. **Browser only** — memerlukan browser modern dengan Web Crypto API support
-2. **File size** — dibatasi oleh RAM browser (max ~200MB untuk kebanyakan browser)
-3. **Tidak persistent** — kunci dan file hilang saat tab ditutup (in-memory storage)
-4. **Single file** — hanya mendukung satu file per enkripsi
-5. **Tidak ada real transfer** — transfer hanya simulasi visual
-6. **Tidak ada key management** — user harus menyimpan kunci secara manual
-7. **Performance.memory** — hanya tersedia di Chrome (V8), browser lain menggunakan estimasi
-
----
-
-## 🔒 Catatan Keamanan
-
-### Brute Force Simulator
-> ⚠️ **PENTING**: Fitur brute force simulator hanya untuk **demonstrasi edukatif**. 
-> - Hanya menyerang **dummy key kecil** (8-bit hingga 16-bit) yang di-generate secara random dalam browser
-> - **TIDAK** menyerang file asli, kunci AES asli, kunci RSA asli, password asli, atau sistem pihak ketiga
-> - Tujuannya adalah menunjukkan bahwa kunci kecil mudah di-brute-force sedangkan kunci besar (128-bit, 256-bit, 2048-bit) secara komputasi tidak feasible
-
-### Best Practices
-- Jangan membagikan private key kepada siapapun
-- Gunakan kunci RSA minimal 2048-bit (sudah default di sistem ini)
-- IV selalu di-generate secara random untuk setiap enkripsi
-- Pastikan browser dalam keadaan up-to-date
-
----
-
-## 👨‍💻 Dibuat untuk
-
-**Tugas Besar Keamanan Informasi**  
-Sistem Keamanan File Sharing berbasis Hybrid Cryptography
-
-© 2025 Encrypter.ID
+**Program Studi Teknik Informatika**  
+**Fakultas Ilmu Komputer**  
+**© 2026 Encrypter.ID. All Rights Reserved.**

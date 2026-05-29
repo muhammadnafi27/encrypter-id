@@ -1,4 +1,4 @@
-# Testing Guide — Encrypter.ID
+# Testing Guide - Encrypter.ID
 
 ## Overview
 
@@ -24,16 +24,16 @@ Panduan ini menjelaskan cara menguji semua fitur Encrypter.ID secara manual. Sem
 
 1. Buka website dan navigasi ke **Encrypt**
 2. Upload file apapun (contoh: gambar JPEG, dokumen PDF, file teks)
-3. Klik **"Generate RSA Key Pair"** — tunggu status berubah hijau
-4. Klik **"Generate AES Key"** — tunggu status berubah hijau
-5. Klik **"Encrypt File"** — tunggu proses selesai
-6. Klik **"Export Private Key"** — simpan file `private_key.pem`
-7. Klik **"Download Encrypted Package"** — simpan file `.enc.json`
+3. Klik **"Generate RSA Key Pair"** - tunggu status berubah hijau
+4. Klik **"Generate AES Key"** - tunggu status berubah hijau
+5. Klik **"Encrypt File"** - tunggu proses selesai
+6. Klik **"Export Private Key"** - simpan file `private_key.pem`
+7. Klik **"Download Encrypted Package"** - simpan file `.enc.json`
 8. Navigasi ke **Decrypt**
 9. Upload file `.enc.json` yang baru didownload
 10. Klik **"Import .pem File"** dan pilih `private_key.pem`
-11. Klik **"Validate Key"** — pastikan status hijau
-12. Klik **"Decrypt File"** — tunggu proses selesai
+11. Klik **"Validate Key"** - pastikan status hijau
+12. Klik **"Decrypt File"** - tunggu proses selesai
 13. Klik **"Download Original File"**
 
 **Expected Result**:
@@ -196,11 +196,11 @@ Panduan ini menjelaskan cara menguji semua fitur Encrypter.ID secara manual. Sem
 | CPU Score | Skor benchmark CPU sintetis | 500-5000 |
 
 ### Faktor yang Mempengaruhi Performa
-1. **CPU speed** — Prosesor lebih cepat = benchmark lebih cepat
-2. **Available RAM** — RAM terbatas dapat memperlambat file besar
-3. **Browser** — Chrome biasanya paling cepat (V8 engine)
-4. **Background processes** — Tab lain dapat mempengaruhi hasil
-5. **Hardware acceleration** — AES-NI instruction set mempercepat AES
+1. **CPU speed** - Prosesor lebih cepat = benchmark lebih cepat
+2. **Available RAM** - RAM terbatas dapat memperlambat file besar
+3. **Browser** - Chrome biasanya paling cepat (V8 engine)
+4. **Background processes** - Tab lain dapat mempengaruhi hasil
+5. **Hardware acceleration** - AES-NI instruction set mempercepat AES
 
 ### Tips untuk Hasil Konsisten
 - Tutup tab dan aplikasi lain
@@ -228,4 +228,4 @@ Panduan ini menjelaskan cara menguji semua fitur Encrypter.ID secara manual. Sem
 1. File > 200MB mungkin menyebabkan browser crash (tergantung RAM)
 2. `performance.memory` hanya tersedia di Chrome/Edge (V8 engine)
 3. Beberapa browser memerlukan HTTPS/localhost untuk Web Crypto API
-4. Kunci dan file tidak disimpan secara persistent — hilang saat tab ditutup
+4. Kunci dan file tidak disimpan secara persistent - hilang saat tab ditutup

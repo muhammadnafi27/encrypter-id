@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="120" height="140">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00FF88;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#00C853;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A7FF3C;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Shield body -->
+  <path d="M60 8 L108 30 L108 72 Q108 110 60 132 Q12 110 12 72 L12 30 Z"
+        fill="none"
+        stroke="url(#shieldGrad)"
+        stroke-width="3"
+        filter="url(#glow)"
+        opacity="0.95">
+    <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <!-- Inner fill -->
+  <path d="M60 16 L100 35 L100 70 Q100 104 60 124 Q20 104 20 70 L20 35 Z"
+        fill="#101A15"
+        opacity="0.7"/>
+  <!-- Checkmark -->
+  <polyline points="40,70 54,84 80,52"
+            fill="none"
+            stroke="url(#shieldGrad)"
+            stroke-width="5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            filter="url(#glow)"/>
+</svg>

@@ -1,4 +1,4 @@
-@media (max-width: 1024px) {
+﻿@media (max-width: 1024px) {
     .grid-2 {
         grid-template-columns: 1fr;
     }
@@ -188,7 +188,7 @@
         font-size: 0.75rem;
     }
 
-    /* Benchmark table — horizontal scroll */
+    /* Benchmark table - horizontal scroll */
     .bench-table-wrapper {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -383,7 +383,7 @@
 }
 
 /* =============================================
-   Accessibility — Reduced Motion
+   Accessibility - Reduced Motion
    ============================================= */
 @media (prefers-reduced-motion: reduce) {
 

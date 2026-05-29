@@ -17,7 +17,7 @@ const App = (() => {
     }
 
     /**
-     * Handle hash change — show the correct page section
+     * Handle hash change - show the correct page section
      */
     function handleRoute() {
         const hash = (window.location.hash || '#landing').replace('#', '');
@@ -295,7 +295,7 @@ const App = (() => {
                 const pem = Storage.get('rsaPrivateKeyPEM');
                 if (pem) {
                     UI.downloadFile(new Blob([pem], { type: 'text/plain' }), 'private_key.pem');
-                    UI.showToast('Private key exported — Keep this secure!', 'warning');
+                    UI.showToast('Private key exported - Keep this secure!', 'warning');
                 }
             });
         }
@@ -520,7 +520,7 @@ const App = (() => {
             updateDecryptButton();
         } catch (err) {
             Storage.set('importedPrivateKey', null);
-            UI.updateStatus('privkey-status', false, 'Invalid Key ✗');
+            UI.updateStatus('privkey-status', false, 'Invalid Key �-');
             UI.addLog(`[KEY] Validation failed: ${err.message}`, 'error', 'decrypt-log');
             UI.showToast('Invalid private key: ' + err.message, 'error');
         }
@@ -703,56 +703,27 @@ const App = (() => {
     // =============================================
 
     function setupPerformancePage() {
-        // Generate test file buttons
-        const sizes = [
-            { id: 'btn-gen-1mb', size: 1 * 1024 * 1024 },
-            { id: 'btn-gen-5mb', size: 5 * 1024 * 1024 },
-            { id: 'btn-gen-10mb', size: 10 * 1024 * 1024 },
-            { id: 'btn-gen-100mb', size: 100 * 1024 * 1024 }
-        ];
-
-        sizes.forEach(({ id, size }) => {
-            const btn = document.getElementById(id);
-            if (btn) {
-                btn.addEventListener('click', async () => {
-                    try {
-                        btn.disabled = true;
-                        btn.classList.add('btn-loading');
-                        UI.addLog(`[BENCH] Running benchmark for ${Utils.formatFileSize(size)}...`, 'info', 'encrypt-log');
-                        UI.showToast(`Running benchmark: ${Utils.formatFileSize(size)}`, 'info');
-
-                        const result = await PerfLab.runBenchmark(size, (msg, pct) => {
-                            UI.updateProgress('bench-progress', pct, msg);
-                        });
-
-                        // Refresh displays
-                        const results = Storage.getBenchmarkResults();
-                        PerfLab.renderResultsTable('bench-results-table', results);
-                        PerfLab.renderChart('bench-chart', results);
-
-                        UI.showToast(`Benchmark complete: ${Utils.formatFileSize(size)}`, 'success');
-                    } catch (err) {
-                        UI.showToast(`Benchmark failed: ${err.message}`, 'error');
-                    } finally {
-                        btn.disabled = false;
-                        btn.classList.remove('btn-loading');
-                        UI.updateProgress('bench-progress', 0, 'Ready');
-                    }
-                });
-            }
-        });
-
-        // Run all benchmarks button
-        const runAllBtn = document.getElementById('btn-run-all-bench');
-        if (runAllBtn) {
-            runAllBtn.addEventListener('click', async () => {
+        // Run selected benchmarks button
+        const runSelectedBtn = document.getElementById('btn-run-selected-bench');
+        if (runSelectedBtn) {
+            runSelectedBtn.addEventListener('click', async () => {
                 try {
-                    runAllBtn.disabled = true;
+                    // Get checked checkboxes
+                    const checkboxes = document.querySelectorAll('.size-chip-input:checked');
+                    if (checkboxes.length === 0) {
+                        UI.showToast('Pilih setidaknya satu ukuran file untuk diuji!', 'error');
+                        return;
+                    }
+
+                    const selectedSizes = Array.from(checkboxes).map(cb => parseInt(cb.value) * 1024 * 1024);
+
+                    runSelectedBtn.disabled = true;
+                    runSelectedBtn.classList.add('btn-loading');
+                    
+                    // Always clear previous results before running a new batch
                     Storage.clearBenchmarkResults();
 
-                    const allSizes = [1 * 1024 * 1024, 5 * 1024 * 1024, 10 * 1024 * 1024];
-
-                    await PerfLab.runMultipleBenchmarks(allSizes, (msg, pct) => {
+                    await PerfLab.runMultipleBenchmarks(selectedSizes, (msg, pct) => {
                         UI.updateProgress('bench-progress', pct, msg);
                     });
 
@@ -760,11 +731,12 @@ const App = (() => {
                     PerfLab.renderResultsTable('bench-results-table', results);
                     PerfLab.renderChart('bench-chart', results);
 
-                    UI.showToast('All benchmarks complete!', 'success');
+                    UI.showToast('Benchmark complete!', 'success');
                 } catch (err) {
                     UI.showToast(`Benchmark error: ${err.message}`, 'error');
                 } finally {
-                    runAllBtn.disabled = false;
+                    runSelectedBtn.disabled = false;
+                    runSelectedBtn.classList.remove('btn-loading');
                     UI.updateProgress('bench-progress', 0, 'Ready');
                 }
             });
@@ -917,13 +889,13 @@ const App = (() => {
             </div>
             <div class="comparison-card">
                 <h4>AES 128-bit</h4>
-                <p class="comparison-value">3.4 × 10³⁸ possible keys</p>
+                <p class="comparison-value">3.4 �- 10³⁸ possible keys</p>
                 <p class="comparison-time">≈ ${aes128Years.toExponential(1)} years</p>
                 <p class="comparison-note">Longer than the age of the universe</p>
             </div>
             <div class="comparison-card">
                 <h4>AES 256-bit</h4>
-                <p class="comparison-value">1.1 × 10⁷⁷ possible keys</p>
+                <p class="comparison-value">1.1 �- 10⁷⁷ possible keys</p>
                 <p class="comparison-time">Practically impossible</p>
                 <p class="comparison-note">Even with all computers on Earth</p>
             </div>
@@ -944,7 +916,7 @@ const App = (() => {
 })();
 
 // =============================================
-// Bootstrap — Start the application on DOM ready
+// Bootstrap - Start the application on DOM ready
 // =============================================
 document.addEventListener('DOMContentLoaded', () => {
     App.init();

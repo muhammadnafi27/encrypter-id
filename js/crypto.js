@@ -1,4 +1,4 @@
-const Crypto = (() => {
+﻿const Crypto = (() => {
     'use strict';
 
     // =============================================
@@ -30,7 +30,7 @@ const Crypto = (() => {
         try {
             const keyPair = await window.crypto.subtle.generateKey(
                 RSA_ALGORITHM,
-                true, // extractable — needed to export keys
+                true, // extractable - needed to export keys
                 ['encrypt', 'decrypt'] // wrapKey/unwrapKey also possible but encrypt/decrypt is clearer
             );
 
@@ -51,7 +51,7 @@ const Crypto = (() => {
         try {
             const key = await window.crypto.subtle.generateKey(
                 AES_ALGORITHM,
-                true, // extractable — needed for RSA wrapping
+                true, // extractable - needed for RSA wrapping
                 ['encrypt', 'decrypt']
             );
 

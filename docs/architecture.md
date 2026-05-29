@@ -1,4 +1,4 @@
-# Architecture — Encrypter.ID
+# Architecture - Encrypter.ID
 
 ## System Overview
 
@@ -185,13 +185,13 @@ Storage.state = {
 }
 ```
 
-No persistent storage is used — all data is lost when the tab is closed.
+No persistent storage is used - all data is lost when the tab is closed.
 
 ## Security Model
 
-1. **No network requests** — All operations are local
-2. **Web Crypto API** — Uses browser-native cryptographic primitives (not JS implementations)
-3. **Random key generation** — Using `crypto.getRandomValues()` (CSPRNG)
-4. **AEAD** — GCM mode provides both confidentiality and integrity
-5. **Fresh IV** — New random IV for every encryption operation
-6. **Key isolation** — Private keys never leave the browser
+1. **No network requests** - All operations are local
+2. **Web Crypto API** - Uses browser-native cryptographic primitives (not JS implementations)
+3. **Random key generation** - Using `crypto.getRandomValues()` (CSPRNG)
+4. **AEAD** - GCM mode provides both confidentiality and integrity
+5. **Fresh IV** - New random IV for every encryption operation
+6. **Key isolation** - Private keys never leave the browser

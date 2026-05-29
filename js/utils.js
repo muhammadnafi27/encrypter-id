@@ -180,15 +180,26 @@ const Utils = (() => {
      * @returns {File} Generated test file
      */
     function generateTestFile(sizeInBytes, filename = 'testfile.bin') {
-        // Generate in chunks to avoid memory issues with large files
         const chunkSize = 1024 * 1024; // 1MB chunks
         const chunks = [];
         let remaining = sizeInBytes;
 
+        // Create a pool of random data to copy from (fast)
+        const randomPool = new Uint8Array(65536);
+        crypto.getRandomValues(randomPool);
+
         while (remaining > 0) {
             const size = Math.min(chunkSize, remaining);
             const chunk = new Uint8Array(size);
-            crypto.getRandomValues(chunk);
+            
+            // Fast fill by copying from randomPool
+            let offset = 0;
+            while (offset < size) {
+                const copySize = Math.min(65536, size - offset);
+                chunk.set(randomPool.subarray(0, copySize), offset);
+                offset += copySize;
+            }
+            
             chunks.push(chunk);
             remaining -= size;
         }
