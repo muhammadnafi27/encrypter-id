@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encrypter.ID — Secure File Sharing with Hybrid Cryptography (AES-GCM + RSA-OAEP). Encrypt, transfer, and decrypt files securely in your browser.">
+    <meta name="theme-color" content="#050807">
+    <title>Encrypter.ID — Secure File Sharing with Hybrid Cryptography</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- ============================================= -->
+        <!-- SIDEBAR NAVIGATION (Desktop)                  -->
+        <!-- ============================================= -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="assets/logo.svg" alt="Encrypter.ID Logo" width="40" height="40">
+                    <div>
+                        <div class="sidebar-brand">Encrypter.ID</div>
+                        <div class="sidebar-subtitle">Hybrid Cryptography</div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-title">Main</div>
+                <a href="#landing" class="nav-link active" data-page="landing">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Home
+                </a>
+                
+                <div class="nav-section-title">Operations</div>
+                <a href="#encrypt" class="nav-link" data-page="encrypt">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    Encrypt
+                </a>
+                <a href="#transfer" class="nav-link" data-page="transfer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    Transfer
+                </a>
+                <a href="#decrypt" class="nav-link" data-page="decrypt">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><line x1="12" y1="11" x2="12" y2="7"/></svg>
+                    Decrypt
+                </a>
+
+                <div class="nav-section-title">Analysis</div>
+                <a href="#performance" class="nav-link" data-page="performance">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Performance Lab
+                </a>
+                <a href="#security" class="nav-link" data-page="security">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Security Demo
+                </a>
+
+                <div class="nav-section-title">Reference</div>
+                <a href="#docs" class="nav-link" data-page="docs">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    Documentation
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div>Tugas Besar Keamanan Informasi</div>
+                <div style="margin-top:4px; color: var(--accent); font-weight: 600;">© 2025 Encrypter.ID</div>
+            </div>
+        </aside>
+
+        <!-- Sidebar overlay (mobile) -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <!-- ============================================= -->
+        <!-- MOBILE HEADER                                 -->
+        <!-- ============================================= -->
+        <header class="mobile-header">
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+            <div class="sidebar-logo" style="gap:8px;">
+                <img src="assets/logo.svg" alt="Logo" width="28" height="28">
+                <span class="sidebar-brand" style="font-size:1rem;">Encrypter.ID</span>
+            </div>
+            <div style="width:40px;"></div>
+        </header>
+
+        <!-- ============================================= -->
+        <!-- MAIN CONTENT AREA                             -->
+        <!-- ============================================= -->
+        <main class="main-content" id="app-content">
+            <!-- =========================================
+                 PAGE 1: LANDING
+                 ========================================= -->
+            <section class="page-section" id="page-landing">
+                <div class="hero">
+                    <div class="hero-logo">
+                        <img src="assets/logo.svg" alt="Encrypter.ID" width="100" height="100">
+                    </div>
+                    <h1 class="hero-title">Secure File Sharing with Hybrid Cryptography</h1>
+                    <p class="hero-subtitle">
+                        Sistem keamanan file sharing menggunakan <strong>AES-GCM</strong> untuk enkripsi file 
+                        dan <strong>RSA-OAEP</strong> untuk mengenkripsi kunci AES. 
+                        Semua proses berjalan di browser Anda — tidak ada data yang dikirim ke server.
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-lg" id="cta-start">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            Start Encrypting
+                        </button>
+                        <button class="btn btn-outline btn-lg" id="cta-perf">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            View Performance Lab
+                        </button>
+                    </div>
+
+                    <!-- Data Flow: Alice → Bob -->
+                    <div class="data-flow">
+                        <div class="flow-node card-animated">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <span class="flow-node-label">Alice</span>
+                        </div>
+                        <span class="flow-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                        <div class="flow-node card-animated">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            <span class="flow-node-label">Encrypt</span>
+                        </div>
+                        <span class="flow-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                        <div class="flow-node card-animated">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/></svg>
+                            <span class="flow-node-label">Transfer</span>
+                        </div>
+                        <span class="flow-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                        <div class="flow-node card-animated">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><line x1="12" y1="11" x2="12" y2="7"/></svg>
+                            <span class="flow-node-label">Decrypt</span>
+                        </div>
+                        <span class="flow-arrow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                        <div class="flow-node card-animated">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            <span class="flow-node-label">Bob</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Cards -->
+                <div class="features-grid">
+                    <div class="card feature-card card-animated">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <h3 class="feature-title">End-to-End Encryption</h3>
+                        <p class="feature-desc">File dienkripsi di browser pengirim dan hanya bisa didekripsi oleh penerima yang memiliki private key. Tidak ada pihak ketiga yang bisa membaca file.</p>
+                    </div>
+                    <div class="card feature-card card-animated">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <h3 class="feature-title">Zero Server Upload</h3>
+                        <p class="feature-desc">Semua proses enkripsi dan dekripsi berjalan 100% lokal di browser Anda menggunakan Web Crypto API. Tidak ada file yang dikirim ke server manapun.</p>
+                    </div>
+                    <div class="card feature-card card-animated">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        </div>
+                        <h3 class="feature-title">Performance Lab</h3>
+                        <p class="feature-desc">Uji performa enkripsi dan dekripsi dengan berbagai ukuran file. Lihat benchmark waktu, estimasi RAM, dan skor CPU secara real-time.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================
+                 PAGE 2: ENCRYPT DASHBOARD
+                 ========================================= -->
+            <section class="page-section" id="page-encrypt">
+                <h2 class="page-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                    Dashboard Encrypt
+                </h2>
+                <p class="page-subtitle">Upload file, generate keys, dan enkripsi dengan AES-GCM + RSA-OAEP</p>
+
+                <div class="grid-2 gap-24">
+                    <!-- Left Column: Upload & Actions -->
+                    <div>
+                        <!-- File Upload -->
+                        <div class="card mb-24">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Upload File
+                            </div>
+                            <div class="drop-zone" id="encrypt-drop-zone">
+                                <input type="file" id="encrypt-file-input" aria-label="Choose file to encrypt">
+                                <div class="drop-zone-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                </div>
+                                <div class="drop-zone-text">Drag & drop file here</div>
+                                <div class="drop-zone-hint">or click to browse • Max 200MB</div>
+                            </div>
+                            <div id="encrypt-file-info" style="display:none; margin-top:16px;"></div>
+                        </div>
+
+                        <!-- Key Generation -->
+                        <div class="card mb-24">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                                Key Generation
+                            </div>
+                            <div class="btn-group mb-16">
+                                <button class="btn btn-primary" id="btn-gen-rsa">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777z"/></svg>
+                                    Generate RSA Key Pair
+                                </button>
+                                <button class="btn btn-secondary" id="btn-gen-aes">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                                    Generate AES Key
+                                </button>
+                            </div>
+
+                            <div class="mt-16" style="display:flex; flex-wrap:wrap; gap:10px;">
+                                <div id="rsa-status">
+                                    <span class="status-indicator status-pending"><span class="status-dot dot-pending"></span> RSA: Not Generated</span>
+                                </div>
+                                <div id="aes-status">
+                                    <span class="status-indicator status-pending"><span class="status-dot dot-pending"></span> AES: Not Generated</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Encrypt Action -->
+                        <div class="card">
+                            <button class="btn btn-primary btn-lg" id="btn-encrypt" disabled style="width:100%;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                                Encrypt File
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Results & Log -->
+                    <div>
+                        <!-- Key Export -->
+                        <div class="card mb-24" id="key-export-section" style="display:none;">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Export Keys
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary btn-sm" id="btn-export-pub">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    Export Public Key
+                                </button>
+                                <button class="btn btn-secondary btn-sm" id="btn-export-priv">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    Export Private Key
+                                </button>
+                                <button class="btn btn-outline btn-sm" id="btn-copy-pub">Copy Pub</button>
+                                <button class="btn btn-outline btn-sm" id="btn-copy-priv">Copy Priv</button>
+                            </div>
+                        </div>
+
+                        <!-- Encryption Results -->
+                        <div class="card mb-24" id="encrypt-result-section" style="display:none;">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                Encryption Results
+                            </div>
+                            <div id="encryption-details"></div>
+                            <button class="btn btn-primary mt-16" id="btn-download-package" style="width:100%;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Download Encrypted Package
+                            </button>
+                        </div>
+
+                        <!-- Activity Log -->
+                        <div class="card">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                                Activity Log
+                            </div>
+                            <div class="terminal" id="encrypt-log"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================
+                 PAGE 3: TRANSFER SIMULATION
+                 ========================================= -->
+            <section class="page-section" id="page-transfer">
+                <h2 class="page-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    Transfer Simulation
+                </h2>
+                <p class="page-subtitle">Simulasi visual pengiriman file terenkripsi dari Alice ke Bob</p>
+
+                <!-- Transfer Visual -->
+                <div class="card-glass mb-24">
+                    <div class="transfer-visual">
+                        <div class="transfer-avatar">
+                            <div class="avatar-circle" style="border-color: var(--accent);">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </div>
+                            <span class="avatar-name">Alice</span>
+                            <span class="avatar-role">Sender</span>
+                        </div>
+
+                        <div class="transfer-line-container" id="transfer-line">
+                            <div class="transfer-line-track">
+                                <div class="transfer-line-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="transfer-avatar">
+                            <div class="avatar-circle" style="border-color: var(--accent-lime);">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent-lime)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </div>
+                            <span class="avatar-name">Bob</span>
+                            <span class="avatar-role">Receiver</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Steps -->
+                    <div class="transfer-steps">
+                        <div class="transfer-step" id="step-preparing">
+                            <div class="step-circle">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                            </div>
+                            <span class="step-label">Preparing</span>
+                        </div>
+                        <div class="transfer-step" id="step-encrypting">
+                            <div class="step-circle">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                            </div>
+                            <span class="step-label">Encrypting</span>
+                        </div>
+                        <div class="transfer-step" id="step-sending">
+                            <div class="step-circle">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                            </div>
+                            <span class="step-label">Sending</span>
+                        </div>
+                        <div class="transfer-step" id="step-received">
+                            <div class="step-circle">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                            <span class="step-label">Received</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-bar" id="transfer-progress">
+                        <div class="progress-header">
+                            <span class="progress-label">Ready</span>
+                            <span class="progress-percent">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2 gap-24">
+                    <!-- Metadata -->
+                    <div class="card">
+                        <div class="card-header">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                            Transfer Metadata
+                        </div>
+                        <div id="transfer-metadata">
+                            <div class="empty-state">Start a simulation to see transfer metadata</div>
+                        </div>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+                        <p style="color:var(--text-secondary); margin-bottom:20px; font-size:0.9rem;">
+                            Simulasi pengiriman file terenkripsi.<br>
+                            Encrypt file terlebih dahulu di halaman Encrypt untuk data nyata.
+                        </p>
+                        <button class="btn btn-primary btn-lg" id="btn-start-transfer">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            Start Simulation
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================
+                 PAGE 4: DECRYPT & DOWNLOAD
+                 ========================================= -->
+            <section class="page-section" id="page-decrypt">
+                <h2 class="page-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><line x1="12" y1="11" x2="12" y2="7"/></svg>
+                    Decrypt & Download
+                </h2>
+                <p class="page-subtitle">Upload file terenkripsi, import private key, dan dekripsi untuk mendapatkan file asli</p>
+
+                <div class="grid-2 gap-24">
+                    <!-- Left Column: Upload & Key Import -->
+                    <div>
+                        <!-- Upload Encrypted Package -->
+                        <div class="card mb-24">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                Upload Encrypted Package
+                            </div>
+                            <div class="drop-zone" id="decrypt-drop-zone">
+                                <input type="file" id="decrypt-file-input" accept=".json,.enc.json" aria-label="Choose encrypted package">
+                                <div class="drop-zone-icon">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/></svg>
+                                </div>
+                                <div class="drop-zone-text">Drop encrypted package (.enc.json)</div>
+                                <div class="drop-zone-hint">or click to browse</div>
+                            </div>
+                            <div id="decrypt-file-info" style="display:none; margin-top:16px;"></div>
+                        </div>
+
+                        <!-- Import Private Key -->
+                        <div class="card mb-24">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777z"/></svg>
+                                Import Private Key
+                            </div>
+                            <textarea id="private-key-input" rows="6" placeholder="Paste RSA private key in PEM format here...&#10;-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----" style="margin-bottom: 12px;"></textarea>
+                            <div class="btn-group mb-16">
+                                <button class="btn btn-secondary" id="btn-validate-key">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                    Validate Key
+                                </button>
+                                <label class="btn btn-outline" style="cursor:pointer;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    Import .pem File
+                                    <input type="file" id="import-key-file" accept=".pem,.txt,.key" style="display:none;">
+                                </label>
+                            </div>
+                            <div id="privkey-status">
+                                <span class="status-indicator status-pending"><span class="status-dot dot-pending"></span> No key imported</span>
+                            </div>
+                        </div>
+
+                        <!-- Decrypt Button -->
+                        <div class="card">
+                            <button class="btn btn-primary btn-lg" id="btn-decrypt" disabled style="width:100%;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><line x1="12" y1="11" x2="12" y2="7"/></svg>
+                                Decrypt File
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Results & Log -->
+                    <div>
+                        <!-- Decryption Results -->
+                        <div class="card mb-24" id="decrypt-result-section" style="display:none;">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                Decryption Results
+                            </div>
+                            <div id="decryption-details"></div>
+                            <button class="btn btn-primary mt-16" id="btn-download-decrypted" style="width:100%;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Download Original File
+                            </button>
+                        </div>
+
+                        <!-- Decryption Log -->
+                        <div class="card">
+                            <div class="card-header">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                                Decryption Log
+                            </div>
+                            <div class="terminal" id="decrypt-log"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================
+                 PAGE 5: PERFORMANCE LAB
+                 ========================================= -->
+            <section class="page-section" id="page-performance">
+                <h2 class="page-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Performance Lab
+                </h2>
+                <p class="page-subtitle">Benchmark enkripsi dan dekripsi dengan berbagai ukuran file</p>
+
+                <!-- Generate Test Files & Run -->
+                <div class="card mb-24">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M13 2v7h7"/></svg>
+                        Benchmark Controls
+                    </div>
+                    <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:16px;">
+                        Pilih ukuran file untuk menjalankan benchmark. Setiap test menggenerate random file, melakukan enkripsi & dekripsi, dan mengukur performa.
+                    </p>
+                    <div class="btn-group mb-16">
+                        <button class="btn btn-secondary" id="btn-gen-1mb">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            1 MB
+                        </button>
+                        <button class="btn btn-secondary" id="btn-gen-5mb">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            5 MB
+                        </button>
+                        <button class="btn btn-secondary" id="btn-gen-10mb">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            10 MB
+                        </button>
+                        <button class="btn btn-secondary" id="btn-gen-100mb">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            100 MB
+                        </button>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" id="btn-run-all-bench">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                            Run All (1, 5, 10 MB)
+                        </button>
+                        <button class="btn btn-danger btn-sm" id="btn-clear-bench">Clear Results</button>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="progress-bar mt-16" id="bench-progress">
+                        <div class="progress-header">
+                            <span class="progress-label">Ready</span>
+                            <span class="progress-percent">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Table -->
+                <div class="card mb-24">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        Results Table
+                    </div>
+                    <div class="bench-table-wrapper" id="bench-results-table">
+                        <p class="empty-state">No benchmark results yet. Run a benchmark above.</p>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                        Performance Chart
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="bench-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================
+                 PAGE 6: SECURITY DEMO
+                 ========================================= -->
+            <section class="page-section" id="page-security">
+                <h2 class="page-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    Security Demo
+                </h2>
+                <p class="page-subtitle">Demonstrasi edukatif mengapa enkripsi dengan kunci besar aman terhadap brute force</p>
+
+                <!-- Brute Force Simulator -->
+                <div class="card mb-24">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9.5 15l1.5-1.5L12.5 15"/></svg>
+                        Brute Force Simulator (Dummy Key Only)
+                    </div>
+                    <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:16px; padding:8px 12px; background:rgba(255,184,48,0.08); border:1px solid rgba(255,184,48,0.15); border-radius:8px;">
+                        ⚠️ Simulasi ini HANYA untuk kunci dummy kecil (8-16 bit) untuk tujuan edukasi. Tidak menyerang file asli, AES asli, RSA asli, password asli, atau sistem pihak ketiga.
+                    </p>
+
+                    <div class="bf-display">
+                        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;">Key Attempts</div>
+                        <div class="bf-counter-display" id="bf-counter">0</div>
+                        <div class="bf-time-display">Time: <span id="bf-time">0 ms</span></div>
+                        <div class="bf-status" id="bf-status">Ready to start</div>
+                    </div>
+
+                    <div class="bf-progress-track">
+                        <div class="bf-progress-fill" id="bf-progress-fill"></div>
+                    </div>
+
+                    <div class="bf-controls">
+                        <select class="bf-select" id="bf-bits-select" aria-label="Key size">
+                            <option value="8">8-bit (256 keys)</option>
+                            <option value="10">10-bit (1,024 keys)</option>
+                            <option value="12">12-bit (4,096 keys)</option>
+                            <option value="16">16-bit (65,536 keys)</option>
+                        </select>
+                        <button class="btn btn-primary" id="btn-start-bruteforce">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            Start Demo
+                        </button>
+                        <button class="btn btn-danger" id="btn-stop-bruteforce" style="display:none;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>
+                            Stop
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Comparison Results (populated after running demo) -->
+                <div class="comparison-grid" id="bf-comparison">
+                    <div class="comparison-card card">
+                        <h4>8-bit Key</h4>
+                        <p class="comparison-value">256 possible keys</p>
+                        <p class="comparison-time">Run demo to see time</p>
+                    </div>
+                    <div class="comparison-card card">
+                        <h4>AES 128-bit</h4>
+                        <p class="comparison-value">3.4 × 10³⁸ possible keys</p>
+                        <p class="comparison-time">Billions of years</p>
+                        <p class="comparison-note">Longer than the age of the universe</p>
+                    </div>
+                    <div class="comparison-card card">
+                        <h4>AES 256-bit</h4>
+                        <p class="comparison-value">1.1 × 10⁷⁷ possible keys</p>
+                        <p class="comparison-time">Practically impossible</p>
+                        <p class="comparison-note">Even with all computers on Earth</p>
+                    </div>
+                    <div class="comparison-card card">
+                        <h4>RSA 2048-bit</h4>
+                        <p class="comparison-value">~2²⁰⁴⁸ combinations</p>
+                        <p class="comparison-time">Computationally infeasible</p>
+                        <p class="comparison-note">Factoring large primes is NP-hard</p>
+                    </div>
+                </div>
+
+                <!-- Security Explanations -->
+                <div class="security-cards mt-32">
+                    <div class="card security-card">
+                        <h3>🔐 Mengapa AES-GCM Aman?</h3>
+                        <p>AES (Advanced Encryption Standard) dengan mode GCM menggunakan kunci 256-bit, memberikan 2²⁵⁶ kemungkinan kunci. Bahkan superkomputer tercepat di dunia membutuhkan waktu lebih lama dari usia alam semesta untuk mencoba semua kunci. GCM juga menyediakan authentication, memastikan data tidak diubah selama transfer.</p>
+                    </div>
+                    <div class="card security-card">
+                        <h3>🔑 Mengapa RSA-OAEP Aman?</h3>
+                        <p>RSA dengan kunci 2048-bit mengandalkan kesulitan memfaktorkan bilangan prima besar. Tidak ada algoritma yang diketahui dapat memfaktorkan angka sebesar ini dalam waktu yang wajar. OAEP padding mencegah serangan chosen-ciphertext. RSA digunakan oleh bank, pemerintah, dan infrastruktur internet di seluruh dunia.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =========================================
+                 PAGE 7: DOCUMENTATION
+                 ========================================= -->
+            <section class="page-section" id="page-docs">
+                <h2 class="page-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                    Documentation
+                </h2>
+                <p class="page-subtitle">Alur kerja sistem Hybrid Cryptography pada Encrypter.ID</p>
+
+                <!-- Flow Diagram (Visual) -->
+                <div class="card mb-24">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        Encryption Flow Diagram
+                    </div>
+                    <div class="flow-diagram">
+                        <div class="flow-box">📁 Upload File</div>
+                        <span class="flow-arrow-sm">→</span>
+                        <div class="flow-box">🔑 Generate AES Key</div>
+                        <span class="flow-arrow-sm">→</span>
+                        <div class="flow-box">🔒 Encrypt File (AES)</div>
+                        <span class="flow-arrow-sm">→</span>
+                        <div class="flow-box">🔐 Encrypt Key (RSA)</div>
+                        <span class="flow-arrow-sm">→</span>
+                        <div class="flow-box">📦 Send Package</div>
+                        <span class="flow-arrow-sm">→</span>
+                        <div class="flow-box">🔓 Decrypt Key (RSA)</div>
+                        <span class="flow-arrow-sm">→</span>
+                        <div class="flow-box">📄 Decrypt File (AES)</div>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step -->
+                <div class="card mb-24">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                        Alur Kerja Detail
+                    </div>
+                    <div class="doc-flow">
+                        <div class="doc-step card-animated">
+                            <div class="doc-step-number">1</div>
+                            <div class="doc-step-content">
+                                <h4>User Upload File</h4>
+                                <p>Pengirim (Alice) memilih file yang ingin dikirim melalui drag-and-drop atau file browser. File dibaca ke dalam memory browser sebagai ArrayBuffer.</p>
+                            </div>
+                        </div>
+                        <div class="doc-step card-animated">
+                            <div class="doc-step-number">2</div>
+                            <div class="doc-step-content">
+                                <h4>Sistem Membuat AES Key</h4>
+                                <p>Sistem men-generate kunci simetris AES-GCM 256-bit menggunakan Web Crypto API (window.crypto.subtle.generateKey). Kunci ini bersifat random dan unik untuk setiap sesi enkripsi.</p>
+                            </div>
+                        </div>
+                        <div class="doc-step card-animated">
+                            <div class="doc-step-number">3</div>
+                            <div class="doc-step-content">
+                                <h4>File Dienkripsi dengan AES-GCM</h4>
+                                <p>File data dienkripsi menggunakan AES-GCM dengan kunci AES yang baru dibuat. Proses ini menghasilkan ciphertext dan Initialization Vector (IV/nonce) 96-bit yang unik. GCM mode juga menghasilkan authentication tag untuk memverifikasi integritas data.</p>
+                            </div>
+                        </div>
+                        <div class="doc-step card-animated">
+                            <div class="doc-step-number">4</div>
+                            <div class="doc-step-content">
+                                <h4>AES Key Dienkripsi dengan RSA Public Key Penerima</h4>
+                                <p>Kunci AES (32 bytes) dienkripsi menggunakan RSA-OAEP dengan public key milik penerima (Bob). Hanya private key Bob yang dapat membuka kunci ini. RSA menggunakan panjang kunci 2048-bit.</p>
+                            </div>
+                        </div>
+                        <div class="doc-step card-animated">
+                            <div class="doc-step-number">5</div>
+                            <div class="doc-step-content">
+                                <h4>File Terenkripsi + Encrypted AES Key Dikirim</h4>
+                                <p>Ciphertext, IV, encrypted AES key, dan metadata dikemas menjadi satu package JSON. Package ini dikirim ke penerima. Penyadap yang mendapatkan package ini tidak bisa membacanya tanpa private key Bob.</p>
+                            </div>
+                        </div>
+                        <div class="doc-step card-animated">
+                            <div class="doc-step-number">6</div>
+                            <div class="doc-step-content">
+                                <h4>Penerima Membuka AES Key dengan RSA Private Key</h4>
+                                <p>Bob menggunakan RSA private key-nya untuk mendekripsi encrypted AES key. Proses ini menggunakan RSA-OAEP decryption. Hanya private key yang cocok dengan public key yang dipakai untuk enkripsi yang bisa berhasil.</p>
+                            </div>
+                        </div>
+                        <div class="doc-step card-animated">
+                            <div class="doc-step-number">7</div>
+                            <div class="doc-step-content">
+                                <h4>AES Key Dipakai untuk Dekripsi File</h4>
+                                <p>Kunci AES yang sudah didekripsi digunakan bersama IV untuk mendekripsi ciphertext menjadi file asli. GCM authentication tag memastikan file tidak diubah selama pengiriman. File asli dapat didownload.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Details -->
+                <div class="tech-grid">
+                    <div class="card tech-card">
+                        <h3>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                            AES-GCM (Symmetric)
+                        </h3>
+                        <ul>
+                            <li>Advanced Encryption Standard — Galois/Counter Mode</li>
+                            <li>Panjang kunci: 256-bit (AES-256)</li>
+                            <li>IV (Initialization Vector): 96-bit (12 bytes)</li>
+                            <li>Menyediakan enkripsi DAN autentikasi (AEAD)</li>
+                            <li>Digunakan untuk mengenkripsi file data (bulk encryption)</li>
+                            <li>Sangat cepat — hardware-accelerated di CPU modern</li>
+                            <li>Standard NIST, digunakan di TLS, HTTPS, VPN</li>
+                        </ul>
+                    </div>
+                    <div class="card tech-card">
+                        <h3>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777z"/></svg>
+                            RSA-OAEP (Asymmetric)
+                        </h3>
+                        <ul>
+                            <li>Rivest-Shamir-Adleman — Optimal Asymmetric Encryption Padding</li>
+                            <li>Panjang kunci: 2048-bit</li>
+                            <li>Hash function: SHA-256</li>
+                            <li>Public key untuk enkripsi, Private key untuk dekripsi</li>
+                            <li>Digunakan untuk mengenkripsi kunci AES (key exchange)</li>
+                            <li>Aman selama faktorisasi prima besar tetap sulit</li>
+                            <li>OAEP padding mencegah serangan chosen-ciphertext</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Security Considerations -->
+                <div class="card mt-24">
+                    <div class="card-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        Security Considerations
+                    </div>
+                    <ul style="list-style:none; padding:0;">
+                        <li style="padding:8px 0; color:var(--text-secondary); display:flex; gap:8px; align-items:flex-start;">
+                            <span style="color:var(--accent); font-weight:700;">›</span>
+                            Semua proses kriptografi berjalan 100% di browser menggunakan Web Crypto API — tidak ada data yang dikirim ke server.
+                        </li>
+                        <li style="padding:8px 0; color:var(--text-secondary); display:flex; gap:8px; align-items:flex-start;">
+                            <span style="color:var(--accent); font-weight:700;">›</span>
+                            Private key harus dijaga kerahasiaannya. Jangan membagikan private key kepada siapapun.
+                        </li>
+                        <li style="padding:8px 0; color:var(--text-secondary); display:flex; gap:8px; align-items:flex-start;">
+                            <span style="color:var(--accent); font-weight:700;">›</span>
+                            IV (Initialization Vector) selalu di-generate secara random untuk setiap enkripsi untuk mencegah serangan replay.
+                        </li>
+                        <li style="padding:8px 0; color:var(--text-secondary); display:flex; gap:8px; align-items:flex-start;">
+                            <span style="color:var(--accent); font-weight:700;">›</span>
+                            GCM authentication tag memverifikasi integritas data — file yang dimodifikasi akan gagal didekripsi.
+                        </li>
+                        <li style="padding:8px 0; color:var(--text-secondary); display:flex; gap:8px; align-items:flex-start;">
+                            <span style="color:var(--accent); font-weight:700;">›</span>
+                            Brute force simulator hanya untuk demonstrasi edukatif menggunakan dummy key kecil (8-16 bit). Tidak ada serangan terhadap sistem kriptografi asli.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <!-- ============================================= -->
+        <!-- BOTTOM NAVIGATION (Mobile)                    -->
+        <!-- ============================================= -->
+        <nav class="bottom-nav">
+            <a href="#landing" class="bottom-nav-link active" data-page="landing">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                Home
+            </a>
+            <a href="#encrypt" class="bottom-nav-link" data-page="encrypt">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                Encrypt
+            </a>
+            <a href="#decrypt" class="bottom-nav-link" data-page="decrypt">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><line x1="12" y1="11" x2="12" y2="7"/></svg>
+                Decrypt
+            </a>
+            <a href="#performance" class="bottom-nav-link" data-page="performance">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Lab
+            </a>
+            <a href="#docs" class="bottom-nav-link" data-page="docs">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
+                Docs
+            </a>
+        </nav>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- SCRIPTS (order matters: dependencies first)   -->
+    <!-- ============================================= -->
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/crypto.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/performance.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

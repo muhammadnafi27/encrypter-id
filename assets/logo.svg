@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00FF88;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00C853;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="lockGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5FFF9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A7FF3C;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="outerGlow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Shield shape -->
+  <path d="M100 20 L170 55 L170 110 Q170 155 100 185 Q30 155 30 110 L30 55 Z" 
+        fill="none" 
+        stroke="url(#shieldGrad)" 
+        stroke-width="3" 
+        filter="url(#outerGlow)"
+        opacity="0.9">
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+  </path>
+  
+  <!-- Inner shield fill -->
+  <path d="M100 28 L162 59 L162 108 Q162 149 100 177 Q38 149 38 108 L38 59 Z" 
+        fill="#101A15" 
+        opacity="0.8"/>
+  
+  <!-- Lock body -->
+  <rect x="78" y="95" width="44" height="35" rx="5" ry="5" 
+        fill="url(#lockGrad)" 
+        filter="url(#glow)" 
+        opacity="0.95"/>
+  
+  <!-- Lock shackle -->
+  <path d="M85 95 L85 78 Q85 62 100 62 Q115 62 115 78 L115 95" 
+        fill="none" 
+        stroke="url(#lockGrad)" 
+        stroke-width="5" 
+        stroke-linecap="round"
+        filter="url(#glow)"/>
+  
+  <!-- Keyhole -->
+  <circle cx="100" cy="108" r="5" fill="#050807"/>
+  <rect x="98" y="111" width="4" height="10" rx="1" fill="#050807"/>
+  
+  <!-- Orbiting particle 1 -->
+  <circle r="3" fill="#00FF88" filter="url(#glow)">
+    <animateMotion dur="4s" repeatCount="indefinite">
+      <mpath href="#orbitPath1"/>
+    </animateMotion>
+  </circle>
+  <path id="orbitPath1" d="M100 15 Q180 50 175 115 Q170 160 100 190 Q30 160 25 115 Q20 50 100 15" fill="none"/>
+  
+  <!-- Orbiting particle 2 -->
+  <circle r="2" fill="#A7FF3C" filter="url(#glow)" opacity="0.7">
+    <animateMotion dur="5s" repeatCount="indefinite" begin="2s">
+      <mpath href="#orbitPath1"/>
+    </animateMotion>
+  </circle>
+  
+  <!-- Data flow dots -->
+  <circle r="2" fill="#00FF88" opacity="0.6">
+    <animate attributeName="cy" values="45;140;45" dur="2.5s" repeatCount="indefinite"/>
+    <animate attributeName="cx" values="55;75;55" dur="2.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.8;0" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle r="2" fill="#00FF88" opacity="0.6">
+    <animate attributeName="cy" values="140;45;140" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="cx" values="140;120;140" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0.8;0" dur="3s" repeatCount="indefinite"/>
+  </circle>
+</svg>
